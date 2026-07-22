@@ -273,10 +273,11 @@ int main(int argc, char const *argv[])
         CUDA_CHECK(cudaMemcpy(d_vector_index,all_pats_reduced[i].vector_index,count * sizeof(uint32_t),cudaMemcpyHostToDevice));
 
         //division de los bloques de trabajo para la tarjeta de video
+        const size_t work_items = count - 2;
         const size_t blocks = (work_items + threads_cuda - 1) / threads_cuda;
 
         //ejecucion del kernel de cuda, se copia los valores previos y se ejecuta la comprobación
-        check_pat_CUDA<<<blocks, threads_cuda>>>(d_vector_index,count,pat_results_d,pat_results_d_count,max_results );
+        check_pat_CUDA<<<blocks, threads_cuda>>>(d_vector_index,count,pat_results_d,pat_results_count,max_results );
 
         //copiamos la cantidad de resultados a una variable en cpu para poder usarla 
         uint32_t pat_results_count_cpu;
@@ -285,7 +286,7 @@ int main(int argc, char const *argv[])
         //si los resultados son mayores a 0 se copia al vector del tamaño de la combinación
         if(pat_results_count_cpu>0){
             valid_combination *pat_results_cpu =(valid_combination *)malloc(pat_results_count_cpu * sizeof(valid_combination));
-            CUDA_CHECK(cudaMemcpy(pat_results_cpu,pat_results,pat_results_count_cpu * sizeof(valid_combination),cudaMemcpyDeviceToHost));
+            CUDA_CHECK(cudaMemcpy(pat_results_cpu,pat_results_d,pat_results_count_cpu * sizeof(valid_combination),cudaMemcpyDeviceToHost));
 
             //Escritura en archivo de texto de los resultados
             FILE *fp = fopen("resultados.txt", "a");
