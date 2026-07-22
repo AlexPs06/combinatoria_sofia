@@ -252,7 +252,7 @@ int main(int argc, char const *argv[])
     valid_combination *pat_results_d;
     uint32_t *pat_results_count;
 
-    uint32_t max_results = 1000000; // ajusta según tu caso
+    uint32_t max_results = 10000; // ajusta según tu caso
 
     cudaMalloc(&pat_results_d, max_results * sizeof(valid_combination));
     cudaMalloc(&pat_results_count, sizeof(uint32_t));

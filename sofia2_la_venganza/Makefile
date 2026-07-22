@@ -11,6 +11,8 @@ NVCCFLAGS = -O3 \
             -Xcompiler=-fopenmp \
             -Xcompiler=-Wall \
             -Xcompiler=-Wextra
+#           para 3060ti  -arch=sm_86 \
+
 
 all: $(TARGET)
 

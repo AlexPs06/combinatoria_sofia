@@ -5,7 +5,7 @@
 #include <omp.h>
 #include <string.h>
 
-#define size 15
+#define size 19
 #define mod 3
 #define add_size 3
 #define threads 16
@@ -54,6 +54,13 @@ int main(int argc, char const *argv[])
         uint32_t temp_1[] = {0, 0, 0, 1, 1, 2, 2, 1, 1, 0, 1, 2, 0, 2, 0, 2, 1, 2, 0};
         uint32_t temp_2[] = {1, 1, 2, 2, 1, 1, 1, 2, 0, 0, 2, 2, 1, 0, 2, 0, 0, 0, 0};
         uint32_t temp_3[] = {0, 0, 1, 0, 1, 0, 2, 2, 0, 1, 1, 1, 2, 0, 0, 2, 2, 1, 2};
+        index_to_vector(23591246, temp_1, mod);
+        index_to_vector(49316676, temp_2, mod);
+        index_to_vector(638632836, temp_3, mod);
+        print_vector(temp_1);
+        print_vector(temp_2);
+        print_vector(temp_3);
+        
         for (size_t i = 0; i < 19; i++){
             add[0][i] = temp_1[i];
             add[1][i] = temp_2[i];
@@ -66,6 +73,7 @@ int main(int argc, char const *argv[])
         }
     }
     
+    exit(1);
 
 
 
