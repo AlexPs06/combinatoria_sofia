@@ -257,7 +257,7 @@ int main(int argc, char const *argv[])
     cudaMalloc(&pat_results_d, max_results * sizeof(valid_combination));
     cudaMalloc(&pat_results_count, sizeof(uint32_t));
 
-    for (size_t i = all_pats_reduced_size-1; i > 0; i--) {
+    for (size_t i = 0; i <  all_pats_reduced_size; i++) {
 
         const size_t count =
             all_pats_reduced[i].size_vector_index;
@@ -330,7 +330,7 @@ int main(int argc, char const *argv[])
             printf("voy 3/4 %lu\n",i);
 
         
-        break;
+        // break;
     }
 
     /*

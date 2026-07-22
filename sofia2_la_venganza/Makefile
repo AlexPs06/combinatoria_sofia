@@ -5,7 +5,7 @@ NVCC = nvcc
 
 NVCCFLAGS = -O3 \
             -std=c++17 \
-            -arch=sm_86 \
+            -arch=sm_61 \
             -lineinfo \
             -Xptxas=-v \
             -Xcompiler=-fopenmp \
