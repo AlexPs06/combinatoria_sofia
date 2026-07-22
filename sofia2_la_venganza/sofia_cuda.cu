@@ -9,10 +9,11 @@
 #include <cuda_runtime.h>
 #include <time.h>
 
-#define size 19
-#define mod 3
-#define add_size 3
-#define threads 16
+//variables globales que definen el tamaño del problea
+#define size 19 //define la cantidad de posiciones del vector
+#define mod 3 //define la cantidad de elementos existentes 
+#define add_size 3 //tamaño de las sumas a realizar
+#define threads 16 //Cantidad de hilos a usar para la busqueda de pats 
 
 
 
@@ -40,10 +41,12 @@ typedef struct {
     uint32_t capacity_vector_index;
 } pat;
 
+typedef struct {
+    uint32_t selected[add_size];
+} valid_combination;
 
 
 
-static inline void check_vectors(int start, int depth, uint32_t selected[add_size],uint32_t pat[size]);
 static inline int check_vector_in_list(uint32_t a[size], pat all_pats[], uint32_t size_vectors_pats);
 static inline void pat_init(pat *p);
 static inline void pat_push(pat *p, uint32_t value);
@@ -53,7 +56,7 @@ void end_timer(void);
 static inline void print_vector(unsigned int vector[]);
 static inline bool add_size_vector_2(uint32_t add[add_size][size] );
 
-static inline bool check_checksum_vector(uint32_t in[size] );
+static inline bool check_vector_constraint(uint32_t in[size] );
 int total_vectors = 1;
 int total_vectors_serach = 0;
 static inline void check_pat(int start, int depth, uint32_t selected[add_size], pat all_pats);
@@ -63,7 +66,7 @@ static inline void check_pat(int start, int depth, uint32_t selected[add_size], 
 
 __device__ __host__ static inline void index_to_vector(uint64_t index, uint32_t vector[size], int num_values);
 __device__ __host__ static inline bool add_size_vector(uint32_t add[add_size][size] );
-__global__ void check_pat_CUDA(const uint32_t *vector_index,uint32_t size_vector_index);
+__global__ void check_pat_CUDA(const uint32_t *vector_index,uint32_t size_vector_index, valid_combination *results, uint32_t *count, uint32_t max_results);
 __host__ __device__  static inline void patt(uint32_t in[size],uint32_t out[size] );
 __host__ __device__ static inline void copy_vectors(uint32_t a[size], uint32_t b[size]);
 __device__ __host__ static inline void add_vectors(uint32_t a[size],uint32_t b[size],uint32_t c[size] );
@@ -100,34 +103,35 @@ int main(int argc, char const *argv[])
 
 
 
-
+    //contador de tiempo para calcular cuanto tardo en realizar la busqueda, este es el inicio 
     start_timer();
+
+    //cantidad de vectores totales que exiten
     for (int i = 0; i < size; i++) {
         total_vectors *= mod;
     }
-
-    // for (int i = 0; i < total_vectors; i++) {
-    //     index_to_vector(i, vector,  mod);
-    //     print_vector(vector);
-    // }
-   
-    // printf("-------------------------------\n");
-
-    
     printf("total_vectors %i \n", total_vectors);
 
+
+    //busqueda en paralelo de los vectores usando openmp 
     #pragma omp parallel for num_threads(threads) schedule(dynamic)
     for (int i = 1; i <= total_vectors; i++) {
+        //creacion del vector temporal del tamaño del vector a buscar
         uint32_t vector_temp[size];
         index_to_vector(i, vector_temp, mod);   
 
-        if(check_checksum_vector(vector_temp)){
+
+        //comprobamos las restriciones del vector. (si la suma de los elementos modulo el numero de elementos es 0)
+        if(check_vector_constraint(vector_temp)){
             uint32_t pat_temp[size];
             patt(vector_temp,pat_temp);
             
             #pragma omp critical
             {
+                //comprobamos si el vector que paso las restricciones no tiene un equivalente o es el equivalente de alguno ya existente 
                 if(check_vector_in_list(pat_temp,all_pats,all_pats_size) == (-1) ){
+                    
+                    //añadimos el vector si es nuevo
                     pat_init(&all_pats[all_pats_size]);
                     for (size_t j = 0; j < size; j++){
                         all_pats[all_pats_size].vector_pat[j]=pat_temp[j];
@@ -136,9 +140,10 @@ int main(int argc, char const *argv[])
                     pat_push(&all_pats[all_pats_size], i);
                     all_pats_size++;
                 }
+                //si es un equivalente se evita
                 else if (check_vector_in_list(pat_temp,all_pats,all_pats_size) == (-2)) {
 
-                    
+                //si el vector aparece y no es un equivalente sino directamente el mismo se añade la aparicion a la lista de indices
                 }else{
                     int index = check_vector_in_list(pat_temp,all_pats,all_pats_size);
 
@@ -151,8 +156,8 @@ int main(int argc, char const *argv[])
 
 
     
-
-    printf("Pat distintos totales %i \n",all_pats_size);
+    //se imprime y se crea una variable del tamaño de todos los pat distintos encontrados
+    printf("Pat distintos totales %lu \n",all_pats_size);
     pat *all_pats_reduced = (pat *)malloc(all_pats_size * sizeof(pat));
 
     if (all_pats_reduced == NULL) {
@@ -160,8 +165,8 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
+    //reducimos la variable a solo los que aparezcan mas de la cantidad de la suma buscada
     size_t all_pats_reduced_size = 0;
-
     for (size_t i = 0; i < all_pats_size; i++) {
         if (all_pats[i].size_vector_index >= add_size) {
             all_pats_reduced[all_pats_reduced_size] = all_pats[i];
@@ -170,6 +175,7 @@ int main(int argc, char const *argv[])
         }
     }
 
+    //hacemos un realloc para reservar la memoria exacta necesaria y no memoria extra
     pat *tmp = (pat *)realloc(all_pats_reduced,all_pats_reduced_size * sizeof(pat));
 
     if (tmp != NULL || all_pats_reduced_size == 0) {
@@ -177,8 +183,8 @@ int main(int argc, char const *argv[])
     }
 
     
-    
-    printf("Pat distintos totales con aparicion mayor a la suma requerida %i \n",all_pats_reduced_size);
+    //recalculamos los pat que si se revisaran
+    printf("Pat distintos totales con aparicion mayor a la suma requerida %lu \n",all_pats_reduced_size);
 
 
     size_t un_decimo=all_pats_reduced_size/10;
@@ -186,18 +192,13 @@ int main(int argc, char const *argv[])
     size_t un_medio=all_pats_reduced_size/2;
     size_t tres_cuartos=un_cuarto+un_medio;
 
+
+    //valor maximo de la combinatoria a comprobar
     size_t max_vector_index_size = 0;
 
-    // for (size_t i = 0; i < all_pats_reduced_size; i++) {
-    //     if (all_pats_reduced[i].size_vector_index >
-    //         max_vector_index_size) {
-            
-    //         max_vector_index_size =
-    //             all_pats_reduced[i].size_vector_index;
-    //     }
 
-    // }
-
+    //ordenamos por cantidad de aparicion de indices cada pat, usando el metodo
+    //burbuja (esto se puede mejorar pero es irrelevante)
     for (size_t i = 0; i < all_pats_reduced_size; i++) {
         for (size_t j = 0; j < all_pats_reduced_size-i-1; j++) {
 
@@ -209,40 +210,54 @@ int main(int argc, char const *argv[])
         }
     }
 
-    int indice = 0;
+
+
+    //comprobación del vector que sabemos que existe, que debe de existir en el caso que tenemos
+    //Se eliminara una vez se acaben las pruebas de tamaño 19
+    size_t indice = 0;
     if(check_vector_in_list(pat_conocido,all_pats_reduced,all_pats_reduced_size) >= 0){
         printf("%i indice del pat conocido\n", check_vector_in_list(pat_conocido,all_pats_reduced,all_pats_reduced_size) );
         indice=check_vector_in_list(pat_conocido,all_pats_reduced,all_pats_reduced_size);
     }
 
+    //impresion de la cantidad distintas de tamaños de vectores a usar, se puede eliminar
     for (size_t i = 0; i < all_pats_reduced_size; i++) {
         if(i ==0 || all_pats_reduced[i].size_vector_index != all_pats_reduced[i-1].size_vector_index)
-        printf("%i\n",all_pats_reduced[i].size_vector_index);
+            printf("%i\n",all_pats_reduced[i].size_vector_index);
     }
+    //asigancion de la mayor cantidad de valores a probar
     max_vector_index_size=all_pats_reduced[all_pats_reduced_size-1].size_vector_index;
 
-
+    //condicion de comprobación para ver si es factible realizar la busqueda
     if (max_vector_index_size < add_size) {
         fprintf(stderr, "No existen grupos suficientes para comprobar\n");
         return;
     }else{
-        printf("Tamaño maximo a comprobar %i\n",max_vector_index_size);
+        printf("Tamaño maximo a comprobar %lu\n",max_vector_index_size);
     }
 
+
+    //vector de indices a copiar a cuda
+    //las variables con d al inicio o al final indican divice que es decir la tarjeta de cuda
+    //las variables con h al inicio o al final indican el host es decir variables que tienen valor en la cpu
+    //es necesario renombrar para un mejor entendimiento
     uint32_t *d_vector_index = NULL;
+    CUDA_CHECK(cudaMalloc((void **)&d_vector_index,max_vector_index_size * sizeof(uint32_t)));
 
-    CUDA_CHECK(
-        cudaMalloc(
-            (void **)&d_vector_index,
-            max_vector_index_size * sizeof(uint32_t)
-        )
-    );
-
+    //cantidad de hilos a usar por bloque
     const uint32_t threads_cuda = 256;
 
 
-    // #pragma omp parallel for num_threads(threads) schedule(dynamic)
-    for (size_t i = indice; i < all_pats_reduced_size; i++) {
+    //variable de los resulados del pat en cuda
+    valid_combination *pat_results_d;
+    uint32_t *pat_results_count;
+
+    uint32_t max_results = 1000000; // ajusta según tu caso
+
+    cudaMalloc(&pat_results_d, max_results * sizeof(valid_combination));
+    cudaMalloc(&pat_results_count, sizeof(uint32_t));
+
+    for (size_t i = all_pats_reduced_size-1; i > 0; i--) {
 
         const size_t count =
             all_pats_reduced[i].size_vector_index;
@@ -250,29 +265,70 @@ int main(int argc, char const *argv[])
         if (count < add_size) {
             continue;
         }
-        printf("Combinatoria a realizar %i\n",count);
-
+        if(i==indice){
+            printf("voy a hacer el indice %lu\n",i);
+            printf("Combinatoria a realizar %lu\n",count);
+        }
+        //copiado de memoria del vector de pat a cuda
         CUDA_CHECK(cudaMemcpy(d_vector_index,all_pats_reduced[i].vector_index,count * sizeof(uint32_t),cudaMemcpyHostToDevice));
 
-        const size_t work_items = count - 2;
-
+        //division de los bloques de trabajo para la tarjeta de video
         const size_t blocks = (work_items + threads_cuda - 1) / threads_cuda;
 
-        check_pat_CUDA<<<blocks, threads_cuda>>>(d_vector_index,count);
+        //ejecucion del kernel de cuda, se copia los valores previos y se ejecuta la comprobación
+        check_pat_CUDA<<<blocks, threads_cuda>>>(d_vector_index,count,pat_results_d,pat_results_d_count,max_results );
+
+        //copiamos la cantidad de resultados a una variable en cpu para poder usarla 
+        uint32_t pat_results_count_cpu;
+        CUDA_CHECK(cudaMemcpy(&pat_results_count_cpu, pat_results_count,sizeof(uint32_t),cudaMemcpyDeviceToHost));
+        
+        //si los resultados son mayores a 0 se copia al vector del tamaño de la combinación
+        if(pat_results_count_cpu>0){
+            valid_combination *pat_results_cpu =(valid_combination *)malloc(pat_results_count_cpu * sizeof(valid_combination));
+            CUDA_CHECK(cudaMemcpy(pat_results_cpu,pat_results,pat_results_count_cpu * sizeof(valid_combination),cudaMemcpyDeviceToHost));
+
+            //Escritura en archivo de texto de los resultados
+            FILE *fp = fopen("resultados.txt", "a");
+
+            // Escribir el PAT actual
+            fprintf(fp, "PAT: ");
+            for (int p = 0; p < size; p++) {
+                fprintf(fp, "%u ", all_pats_reduced[i].vector_pat[p]);
+            }
+            fprintf(fp, "\n");
+
+            // Escribir las combinaciones válidas
+            for (uint32_t r = 0; r < pat_results_count_cpu; r++) {
+                fprintf(fp, "  %u %u %u\n",
+                        pat_results_cpu[r].selected[0],
+                        pat_results_cpu[r].selected[1],
+                        pat_results_cpu[r].selected[2]);
+            }
+
+            fprintf(fp, "-------------------------------\n");
+
+            fclose(fp);
+            free(pat_results_cpu);
+        }
+
 
         CUDA_CHECK(cudaGetLastError());
+        
+        printf("indice: %lu\n",i);
 
         if(i==(un_decimo))
-            printf("voy 1/10 %i\n",i);
+            printf("voy 1/10 %lu\n",i);
 
         if(i==(un_cuarto))
-            printf("voy 1/4 %i\n",i);
+            printf("voy 1/4 %lu\n",i);
         
         if(i==(un_medio))
-            printf("voy 1/2 %i\n",i);
+            printf("voy 1/2 %lu\n",i);
         
         if(i==(tres_cuartos))
-            printf("voy 3/4 %i\n",i);
+            printf("voy 3/4 %lu\n",i);
+
+        
         break;
     }
 
@@ -412,10 +468,8 @@ static inline void check_pat(int start, int depth, uint32_t selected[add_size], 
 
 
 
-__global__ void check_pat_CUDA(const uint32_t *vector_index,uint32_t size_vector_index) {
-    if (size_vector_index < 3) {
-        return;
-    }
+__global__ void check_pat_CUDA(const uint32_t *vector_index,uint32_t size_vector_index, valid_combination *results, uint32_t *count, uint32_t max_results) {
+   
 
     const size_t start = (size_t)blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -443,13 +497,12 @@ __global__ void check_pat_CUDA(const uint32_t *vector_index,uint32_t size_vector
                     add_size_vector(add);
 
                 if (condition) {
-                    printf(
-                        "%u-%u-%u\n"
-                        "-------------------------------\n",
-                        selected[0],
-                        selected[1],
-                        selected[2]
-                    );
+                    uint32_t pos = atomicAdd(count, 1);
+                    if (pos < max_results) {
+                        results[pos].selected[0] = selected[0];
+                        results[pos].selected[1] = selected[1];
+                        results[pos].selected[2] = selected[2];
+                    }
                 }
             }
         }
@@ -488,16 +541,24 @@ __host__ __device__ static inline void patt(uint32_t in[size],uint32_t out[size]
 }
 
 
-static inline bool check_checksum_vector(uint32_t in[size] ){
+static inline bool check_vector_constraint(uint32_t in[size] ){
 
     int j =0;
     int k =0;
+    int cantidad_uno=0;
+    int cantidad_dos=0;
+
     for (size_t i = 0; i < size; i++){
 
         j = in[i] + j;
         k = (in[i]*in[i]) + k;
+        if(in[i]==1)
+            cantidad_uno++;
+        if(in[i]==2)
+            cantidad_dos++;
+
     }
-    if((j%mod==0) && (k%mod ==0) )
+    if((j%mod==0) && (k%mod ==0) && (cantidad_dos==cantidad_uno) )
         return 1;
     else
         return 0;
@@ -525,10 +586,6 @@ static inline int check_vector_in_list(uint32_t a[size], pat all_pats[], uint32_
     for (size_t i = 0; i < size_vectors_pats; i++){
         uint32_t reverse_vector[size]={0};
         for (size_t j = 0; j < size; j++){
-            // int temp =(3-a[j])%3;
-            // if (temp<0){
-            //     reverse_vector[j]=0;
-            // }
             // logica original
             reverse_vector[j]=(3-a[j])%3;
             if (reverse_vector[j]<0){
@@ -662,64 +719,7 @@ static inline bool add_size_vector_2(uint32_t add[add_size][size]) {
     return true;
 }
 
-static inline void check_vectors(int start, int depth, uint32_t selected[add_size],uint32_t pat[size]){
 
-    
-    
-    if (depth == add_size){
-        uint32_t add[add_size][size];
-
-        for (int i = 0; i < add_size; i++) {
-            uint64_t row = selected[i];
-            index_to_vector(row, add[i], mod);
-        }
-        bool condition = add_size_vector(add);
-
-        if (condition){
-            #pragma omp critical
-            {
-            // for (int i = 0; i < add_size; i++) {
-            //     printf("%i-",selected[i]);
-            // }
-            // printf("\n-------------------------------\n");
-            total_vectors_serach=total_vectors_serach+1;
-            // for (int i = 0; i < add_size; i++) {
-            //     for (size_t j = 0; j < size; j++){
-            //         printf("%d ", add[i][j]);
-            //     }
-            //     printf("\n");
-            // }
-            // printf("------------------------------------------");
-            // printf("\n");
-            // add_size_vector_2(add);
-            // // exit(1);    
-            }
-        }
-        
-        
-        return;
-    }
-
-    for (size_t i = start; i <= total_vectors - (add_size - depth); i++){
-        selected[depth] = i;
-
-        uint32_t vector_temp[size];
-
-        index_to_vector(i, vector_temp, mod);   
-
-        if(check_checksum_vector(vector_temp)){
-            uint32_t pat_temp[size];
-            patt(vector_temp, pat_temp);
-            // check_vectors(i+1, depth+1, selected,pat_temp);
-            if (compare_vectors(pat_temp, pat)) {
-                check_vectors(i+1, depth+1, selected,pat_temp);
-            }
-        }
-
-    }
-
-
-}
 
 
 
