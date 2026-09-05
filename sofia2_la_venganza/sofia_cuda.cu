@@ -194,7 +194,7 @@ int main(int argc, char const *argv[])
 
 
     //valor maximo de la combinatoria a comprobar
-    size_t max_vector_index_size = 0;
+    uint64_t max_vector_index_size = 0;
 
 
     //ordenamos por cantidad de aparicion de indices cada pat, usando el metodo
@@ -241,6 +241,8 @@ int main(int argc, char const *argv[])
     //las variables con d al inicio o al final indican divice que es decir la tarjeta de cuda
     //las variables con h al inicio o al final indican el host es decir variables que tienen valor en la cpu
     //es necesario renombrar para un mejor entendimiento
+    
+    
     uint32_t *d_vector_index = NULL;
     CUDA_CHECK(cudaMalloc((void **)&d_vector_index,max_vector_index_size * sizeof(uint32_t)));
 
@@ -256,8 +258,8 @@ int main(int argc, char const *argv[])
 
     cudaMalloc(&pat_results_d, max_results * sizeof(valid_combination));
     cudaMalloc(&pat_results_count, sizeof(uint32_t));
-
-    for (size_t i = 0; i <  all_pats_reduced_size; i++) {
+                                // i<all_pats_reduced_size
+    for (size_t i = 0; i<all_pats_reduced_size ; i++) {
 
         const size_t count =
             all_pats_reduced[i].size_vector_index;
@@ -269,6 +271,8 @@ int main(int argc, char const *argv[])
             printf("voy a hacer el indice %lu\n",i);
             printf("Combinatoria a realizar %lu\n",count);
         }
+        printf("indice: %lu\n",i);
+
         //copiado de memoria del vector de pat a cuda
         CUDA_CHECK(cudaMemcpy(d_vector_index,all_pats_reduced[i].vector_index,count * sizeof(uint32_t),cudaMemcpyHostToDevice));
 
@@ -289,7 +293,7 @@ int main(int argc, char const *argv[])
             CUDA_CHECK(cudaMemcpy(pat_results_cpu,pat_results_d,pat_results_count_cpu * sizeof(valid_combination),cudaMemcpyDeviceToHost));
 
             //Escritura en archivo de texto de los resultados
-            FILE *fp = fopen("resultados.txt", "a");
+            FILE *fp = fopen("resultados-1.txt", "a");
 
             // Escribir el PAT actual
             fprintf(fp, "PAT: ");
@@ -315,7 +319,6 @@ int main(int argc, char const *argv[])
 
         CUDA_CHECK(cudaGetLastError());
         
-        printf("indice: %lu\n",i);
 
         if(i==(un_decimo))
             printf("voy 1/10 %lu\n",i);

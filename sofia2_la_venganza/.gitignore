@@ -1,0 +1,23 @@
+# Ejecutables compilados
+sofia
+sofia_cuda
+*.out
+*.exe
+
+# Archivos objeto y librerías
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+
+# Archivos generados por CUDA
+*.ptx
+*.cubin
+
+# Directorios de compilación
+build/
+bin/
+
+# Archivos temporales del sistema
+.DS_Store
