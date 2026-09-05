@@ -1,0 +1,247 @@
+pat a seguir
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+vector valido
+=====================================
+Inicio : Sat Aug  8 17:44:44 2026
+=====================================
+total_vectors 1162261467 
+Pat distintos totales 24783 
+Pat distintos totales con aparicion mayor a la suma requerida 24782 
+24463 indice del pat conocido
+19
+27132
+50388
+Tamaño maximo a comprobar 50388
+indice: 24541
+indice: 24540
+indice: 24539
+indice: 24538
+indice: 24537
+indice: 24536
+indice: 24535
+indice: 24534
+indice: 24533
+indice: 24532
+indice: 24531
+indice: 24530
+indice: 24529
+indice: 24528
+indice: 24527
+indice: 24526
+indice: 24525
+indice: 24524
+indice: 24523
+indice: 24522
+indice: 24521
+indice: 24520
+indice: 24519
+indice: 24518
+indice: 24517
+indice: 24516
+indice: 24515
+indice: 24514
+indice: 24513
+indice: 24512
+indice: 24511
+indice: 24510
+indice: 24509
+indice: 24508
+indice: 24507
+indice: 24506
+indice: 24505
+indice: 24504
+indice: 24503
+indice: 24502
+indice: 24501
+indice: 24500
+indice: 24499
+indice: 24498
+indice: 24497
+indice: 24496
+indice: 24495
+indice: 24494
+indice: 24493
+indice: 24492
+indice: 24491
+indice: 24490
+indice: 24489
+indice: 24488
+indice: 24487
+indice: 24486
+indice: 24485
+indice: 24484
+indice: 24483
+indice: 24482
+indice: 24481
+indice: 24480
+indice: 24479
+indice: 24478
+indice: 24477
+indice: 24476
+indice: 24475
+indice: 24474
+indice: 24473
+indice: 24472
+indice: 24471
+indice: 24470
+indice: 24469
+indice: 24468
+indice: 24467
+indice: 24466
+indice: 24465
+indice: 24464
+voy a hacer el indice 24463
+Combinatoria a realizar 50388
+indice: 24463
+indice: 24462
+indice: 24461
+indice: 24460
+indice: 24459
+indice: 24458
+indice: 24457
+indice: 24456
+indice: 24455
+indice: 24454
+indice: 24453
+indice: 24452
+indice: 24451
+indice: 24450
+indice: 24449
+indice: 24448
+indice: 24447
+indice: 24446
+indice: 24445
+indice: 24444
+indice: 24443
+indice: 24442
+indice: 24441
+indice: 24440
+indice: 24439
+indice: 24438
+indice: 24437
+indice: 24436
+indice: 24435
+indice: 24434
+indice: 24433
+indice: 24432
+indice: 24431
+indice: 24430
+indice: 24429
+indice: 24428
+indice: 24427
+indice: 24426
+indice: 24425
+indice: 24424
+indice: 24423
+indice: 24422
+indice: 24421
+indice: 24420
+indice: 24419
+indice: 24418
+indice: 24417
+indice: 24416
+indice: 24415
+indice: 24414
+indice: 24413
+indice: 24412
+indice: 24411
+indice: 24410
+indice: 24409
+indice: 24408
+indice: 24407
+indice: 24406
+indice: 24405
+indice: 24404
+indice: 24403
+indice: 24402
+indice: 24401
+indice: 24400
+indice: 24399
+indice: 24398
+indice: 24397
+indice: 24396
+indice: 24395
+indice: 24394
+indice: 24393
+indice: 24392
+indice: 24391
+indice: 24390
+indice: 24389
+indice: 24388
+indice: 24387
+indice: 24386
+indice: 24385
+indice: 24384
+indice: 24383
+indice: 24382
+indice: 24381
+indice: 24380
+indice: 24379
+indice: 24378
+indice: 24377
+indice: 24376
+indice: 24375
+indice: 24374
+indice: 24373
+indice: 24372
+indice: 24371
+indice: 24370
+indice: 24369
+indice: 24368
+indice: 24367
+indice: 24366
+indice: 24365
+indice: 24364
+indice: 24363
+indice: 24362
+indice: 24361
+indice: 24360
+indice: 24359
+indice: 24358
+indice: 24357
+indice: 24356
+indice: 24355
+indice: 24354
+indice: 24353
+indice: 24352
+indice: 24351
+indice: 24350
+indice: 24349
+indice: 24348
+indice: 24347
+indice: 24346
+indice: 24345
+indice: 24344
+indice: 24343
+indice: 24342
+indice: 24341
+indice: 24340
+indice: 24339
+indice: 24338
+indice: 24337
+indice: 24336
+indice: 24335
+indice: 24334
+indice: 24333
+indice: 24332
+indice: 24331
+indice: 24330
+indice: 24329
+indice: 24328
+indice: 24327
+indice: 24326
+indice: 24325
+indice: 24324
+indice: 24323

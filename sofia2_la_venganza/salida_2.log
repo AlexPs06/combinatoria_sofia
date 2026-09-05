@@ -1,0 +1,103 @@
+pat a seguir
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+vector valido
+=====================================
+Inicio : Wed Jul 29 21:17:57 2026
+=====================================
+total_vectors 1162261467 
+Pat distintos totales 24783 
+Pat distintos totales con aparicion mayor a la suma requerida 24782 
+24464 indice del pat conocido
+19
+27132
+50388
+Tamaño maximo a comprobar 50388
+indice: 24617
+indice: 24616
+indice: 24615
+indice: 24614
+indice: 24613
+indice: 24612
+indice: 24611
+indice: 24610
+indice: 24609
+indice: 24608
+indice: 24607
+indice: 24606
+indice: 24605
+indice: 24604
+indice: 24603
+indice: 24602
+indice: 24601
+indice: 24600
+indice: 24599
+indice: 24598
+indice: 24597
+indice: 24596
+indice: 24595
+indice: 24594
+indice: 24593
+indice: 24592
+indice: 24591
+indice: 24590
+indice: 24589
+indice: 24588
+indice: 24587
+indice: 24586
+indice: 24585
+indice: 24584
+indice: 24583
+indice: 24582
+indice: 24581
+indice: 24580
+indice: 24579
+indice: 24578
+indice: 24577
+indice: 24576
+indice: 24575
+indice: 24574
+indice: 24573
+indice: 24572
+indice: 24571
+indice: 24570
+indice: 24569
+indice: 24568
+indice: 24567
+indice: 24566
+indice: 24565
+indice: 24564
+indice: 24563
+indice: 24562
+indice: 24561
+indice: 24560
+indice: 24559
+indice: 24558
+indice: 24557
+indice: 24556
+indice: 24555
+indice: 24554
+indice: 24553
+indice: 24552
+indice: 24551
+indice: 24550
+indice: 24549
+indice: 24548
+indice: 24547
+indice: 24546
+indice: 24545
+indice: 24544
+indice: 24543
+indice: 24542
+indice: 24541

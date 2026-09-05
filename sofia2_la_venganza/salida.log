@@ -1,0 +1,191 @@
+pat a seguir
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 0 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 2
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 1 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 0
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+suma acumulada desde 2 agregando 1
+1 1 2 2 1 1 1 2 2 2 1 2 0 0 0 0 0 0 0 
+vector valido
+=====================================
+Inicio : Thu Jul 23 01:21:39 2026
+=====================================
+total_vectors 1162261467 
+Pat distintos totales 24783 
+Pat distintos totales con aparicion mayor a la suma requerida 24782 
+24463 indice del pat conocido
+19
+27132
+50388
+Tamaño maximo a comprobar 50388
+indice: 24781
+indice: 24780
+indice: 24779
+indice: 24778
+indice: 24777
+indice: 24776
+indice: 24775
+indice: 24774
+indice: 24773
+indice: 24772
+indice: 24771
+indice: 24770
+indice: 24769
+indice: 24768
+indice: 24767
+indice: 24766
+indice: 24765
+indice: 24764
+indice: 24763
+indice: 24762
+indice: 24761
+indice: 24760
+indice: 24759
+indice: 24758
+indice: 24757
+indice: 24756
+indice: 24755
+indice: 24754
+indice: 24753
+indice: 24752
+indice: 24751
+indice: 24750
+indice: 24749
+indice: 24748
+indice: 24747
+indice: 24746
+indice: 24745
+indice: 24744
+indice: 24743
+indice: 24742
+indice: 24741
+indice: 24740
+indice: 24739
+indice: 24738
+indice: 24737
+indice: 24736
+indice: 24735
+indice: 24734
+indice: 24733
+indice: 24732
+indice: 24731
+indice: 24730
+indice: 24729
+indice: 24728
+indice: 24727
+indice: 24726
+indice: 24725
+indice: 24724
+indice: 24723
+indice: 24722
+indice: 24721
+indice: 24720
+indice: 24719
+indice: 24718
+indice: 24717
+indice: 24716
+indice: 24715
+indice: 24714
+indice: 24713
+indice: 24712
+indice: 24711
+indice: 24710
+indice: 24709
+indice: 24708
+indice: 24707
+indice: 24706
+indice: 24705
+indice: 24704
+indice: 24703
+indice: 24702
+indice: 24701
+indice: 24700
+indice: 24699
+indice: 24698
+indice: 24697
+indice: 24696
+indice: 24695
+indice: 24694
+indice: 24693
+indice: 24692
+indice: 24691
+indice: 24690
+indice: 24689
+indice: 24688
+indice: 24687
+indice: 24686
+indice: 24685
+indice: 24684
+indice: 24683
+indice: 24682
+indice: 24681
+indice: 24680
+indice: 24679
+indice: 24678
+indice: 24677
+indice: 24676
+indice: 24675
+indice: 24674
+indice: 24673
+indice: 24672
+indice: 24671
+indice: 24670
+indice: 24669
+indice: 24668
+indice: 24667
+indice: 24666
+indice: 24665
+indice: 24664
+indice: 24663
+indice: 24662
+indice: 24661
+indice: 24660
+indice: 24659
+indice: 24658
+indice: 24657
+indice: 24656
+indice: 24655
+indice: 24654
+indice: 24653
+indice: 24652
+indice: 24651
+indice: 24650
+indice: 24649
+indice: 24648
+indice: 24647
+indice: 24646
+indice: 24645
+indice: 24644
+indice: 24643
+indice: 24642
+indice: 24641
+indice: 24640
+indice: 24639
+indice: 24638
+indice: 24637
+indice: 24636
+indice: 24635
+indice: 24634
+indice: 24633
+indice: 24632
+indice: 24631
+indice: 24630
+indice: 24629
+indice: 24628
+indice: 24627
+indice: 24626
+indice: 24625
+indice: 24624
+indice: 24623
+indice: 24622
+indice: 24621
+indice: 24620
+indice: 24619
+indice: 24618
+indice: 24617
